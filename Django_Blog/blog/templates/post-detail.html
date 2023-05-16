@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="post-detail">
+        <img src="{{ post.header_image.url }}">
+        <h1>{{ post.title }}</h1>
+        <p>{{ post.author }} | {{ post.publication_date }}</p>
+        <p>{{ post.body }}</p>
+        <p>Likes: {{ post.likes.count }}</p>
+    </div>
+{% endblock content %}
