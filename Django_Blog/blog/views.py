@@ -6,17 +6,17 @@ from .forms import PostForm
 
 # Create your views here.
 
-#def home(request):
-#    return render(request, 'home.html')
+def home(request):
+    return render(request, 'home.html')
 
-class HomeView(ListView):
+class PostsView(ListView):
     model = Post
-    template_name = 'home.html'
+    template_name = 'posts.html'
 
 
 class PostDetailView(DetailView):
     model = Post
-    template_name = 'post_details.html'
+    template_name = 'post-detail.html'
 
 
 class AddPostView(CreateView):

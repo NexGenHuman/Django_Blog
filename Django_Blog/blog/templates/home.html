@@ -1,17 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
+    <br/>
     <h1>Welcome to Blog!</h1>
-    <h2>Posts</h2><hr>
-    <div class="container-fluid">
-        {% for post in object_list %}
-
-            <li>
-                <a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a> - {{ post.author }}<br/>
-                <p>{{ post.body|safe }}</p>
-            </li>
-
-        {% endfor %}
-    </div>
 
 {% endblock %}

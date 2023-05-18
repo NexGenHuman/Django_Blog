@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <br/>
+    <h2>Posts</h2><hr>
+    <div class="container-fluid">
+        <ul class="list-group">
+            {% for post in object_list %}
+                <li class="list-group-item">
+                    {% if post.header_image %}
+                       <img src="{{ post.header_image.url }}" class="img-fluid rounded float-end" width="20%" height="20%">
+                    {% else %}
+                        {% load static %}
+                        <img src="{% static 'blog/placeholder.webp' %}" class="img-fluid rounded float-end" alt="header image" width="20%" height="20%">
+                    {% endif %}
+                    <a href="{% url 'post-detail' post.pk %}">{{ post.title }}</a> - {{ post.author }}<br/>
+                    <p>{{ post.body|safe }}</p>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock content %}
