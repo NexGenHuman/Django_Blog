@@ -10,13 +10,15 @@
         <div class="col">
             <h1>{{ post.title }}</h1>
             <small>Posted by: {{ post.author }}</small>
+            <p>Likes: {{ post.likes.count }}</p>
+            <p>{{ post.publication_date }}</p>
         </div>
         <div class="col">
             {% if post.header_image %}
-                <img src="{{ post.header_image.url }}" class="img-fluid rounded float-end" alt="..." width="30%" height="30%">
+                <img src="{{ post.header_image.url }}" class="img-fluid rounded float-end" alt="..." width="50%" height="50%">
             {% else %}
                 {% load static %}
-                <img src="{% static 'blog/placeholder.webp' %}" class="img-fluid rounded float-end" alt="header image" width="30%" height="30%">
+                <img src="{% static 'blog/placeholder.webp' %}" class="img-fluid rounded float-end" alt="header image" width="50%" height="50%">
             {% endif %}
         </div>
       </div>
@@ -26,4 +28,6 @@
     <p>{{ post.body|safe }}</p>
     <br/>
     <a class="btn btn-secondary" href="{% url 'posts' %}">Back</a>
+    <a class="btn btn-primary" href="{% url 'update_post' post.pk %}">Edit</a>
+    <a class="btn btn-danger" href="{% url 'delete_post' post.pk %}">Delete</a>
 {% endblock %}

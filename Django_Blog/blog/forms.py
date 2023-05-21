@@ -15,3 +15,13 @@ class PostForm(forms.ModelForm):
             'password': forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Password'}),
             'header_image': forms.FileInput(attrs={'class': 'form-control'}),
         }
+
+
+class EditPostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ['title', 'body']
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Title'}),
+            'body': forms.Textarea(attrs={'class': 'form-control', 'style': 'min-height: 100%'}),
+        }

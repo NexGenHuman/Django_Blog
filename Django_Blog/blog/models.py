@@ -32,7 +32,7 @@ class Post(models.Model):
         return self.title + ' | ' + str(self.author)
 
     def get_absolute_url(self):
-        return reverse('post_detail', args=(str(self.id)))
+        return reverse('post-detail', args=(str(self.id)))
 
     class Meta:
         ordering = ['-publication_date']    # default ordering for posts
