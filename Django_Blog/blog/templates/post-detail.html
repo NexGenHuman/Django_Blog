@@ -32,4 +32,25 @@
         <a class="btn btn-primary" href="{% url 'update_post' post.pk %}">Edit</a>
         <a class="btn btn-danger" href="{% url 'delete_post' post.pk %}">Delete</a>
     {% endif %}
-{% endblock %}
+
+    <br/>
+
+    {% comment %} Comments {% endcomment %}
+    {% if user.is_authenticated %}
+
+    {% endif %}
+
+    <br/>
+
+    {% for comment in post.comments.all %}
+        <hr>
+        <div class="d-flex flex-row">
+            <div>
+                <h3>{{ comment.author }}</h3>
+                <p><i class="bi bi-calendar"></i> {{ comment.publication_date }}</p>
+            </div>
+            <div class="vr mx-4"></div>
+            <p>{{ comment.text }}</p>
+        </div>
+    {% endfor %}
+{% endblock content %}
