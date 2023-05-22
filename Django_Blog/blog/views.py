@@ -1,6 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from .models import Post
+from .models import Post, Comment
 from .forms import PostForm, EditPostForm
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -45,3 +45,9 @@ class DeletePostView(LoginRequiredMixin, DeleteView):
     model = Post
     template_name = 'delete_post.html'
     success_url = reverse_lazy('posts')
+
+def DeleteCommentView(request, pk):
+    comment = Comment.objects.get(pk=pk)
+    post_id = comment.post.id
+    comment.delete()
+    return redirect('post-detail', post_id)

@@ -48,6 +48,9 @@
             <div>
                 <h3>{{ comment.author }}</h3>
                 <p><i class="bi bi-calendar"></i> {{ comment.publication_date }}</p>
+                {% if comment.author == user %}
+                    <a class="btn btn-outline-danger" href="{% url 'delete_comment' comment.pk %}">Delete</a>
+                {% endif %}
             </div>
             <div class="vr mx-4"></div>
             <p>{{ comment.text }}</p>
