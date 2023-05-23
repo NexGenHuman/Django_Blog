@@ -34,10 +34,16 @@
     {% endif %}
 
     <br/>
+    <hr>
+    <br/>
 
     {% comment %} Comments {% endcomment %}
     {% if user.is_authenticated %}
-
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button class="btn btn-primary">Add Comment</button>
+        </form>
     {% endif %}
 
     <br/>
@@ -49,6 +55,7 @@
                 <h3>{{ comment.author }}</h3>
                 <p><i class="bi bi-calendar"></i> {{ comment.publication_date }}</p>
                 {% if comment.author == user %}
+                    <a class="btn btn-outline-primary" href="{% url 'update_comment' comment.pk %}">Edit</a>
                     <a class="btn btn-outline-danger" href="{% url 'delete_comment' comment.pk %}">Delete</a>
                 {% endif %}
             </div>
