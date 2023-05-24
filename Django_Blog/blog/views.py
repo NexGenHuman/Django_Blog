@@ -43,6 +43,10 @@ class AddPostView(LoginRequiredMixin, CreateView):
     template_name = 'add_post.html'
     #fields = ['author', 'title', 'category', 'body', 'header_image', 'requires_permission', 'password']
 
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+    
 
 class UpdatePostView(LoginRequiredMixin, UpdateView):
     login_url = 'login'
@@ -52,6 +56,11 @@ class UpdatePostView(LoginRequiredMixin, UpdateView):
     template_name = 'update_post.html'
     #fields = ['title', 'body']
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = queryset.filter(author=self.request.user)
+        return queryset
+
 
 class DeletePostView(LoginRequiredMixin, DeleteView):
     login_url = 'login'
@@ -59,6 +68,11 @@ class DeletePostView(LoginRequiredMixin, DeleteView):
     model = Post
     template_name = 'delete_post.html'
     success_url = reverse_lazy('posts')
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = queryset.filter(author=self.request.user)
+        return queryset
     
 class UpdateCommentView(LoginRequiredMixin, UpdateView):
     login_url = 'login'
