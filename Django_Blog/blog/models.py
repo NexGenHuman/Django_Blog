@@ -58,6 +58,9 @@ class Profile(models.Model):
     description = models.TextField(max_length=250)
     profile_image = models.ImageField(null=True, blank=True, upload_to='profile_images/')
 
+    def __str__(self):
+        return self.user.username
+
 class Category(models.Model):
     name = models.CharField(max_length=50, unique=True)
 
