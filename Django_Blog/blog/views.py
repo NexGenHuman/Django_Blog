@@ -1,12 +1,22 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Post, Comment, Profile
-from .forms import PostForm, EditPostForm, CommentForm, UpdateCommentForm
+from .forms import PostForm, ProfilePageForm, EditPostForm, CommentForm, UpdateCommentForm
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 # Create your views here.
+class CreateProfilePage(CreateView):
+    model = Profile
+    template_name = 'create_profile_page.html'
+    form_class = ProfilePageForm
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
+
 class EditProfilePageView(UpdateView):
     model = Profile
     template_name = 'edit_profile_page.html'

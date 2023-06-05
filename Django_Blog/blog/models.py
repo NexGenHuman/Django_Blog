@@ -61,6 +61,9 @@ class Profile(models.Model):
     def __str__(self):
         return self.user.username
 
+    def get_absolute_url(self):
+        return reverse('home')
+
 class Category(models.Model):
     name = models.CharField(max_length=50, unique=True)
 
