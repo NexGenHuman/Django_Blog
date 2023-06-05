@@ -10,7 +10,9 @@
       <div class="row align-items-center">
         <div class="col">
             <h1>{{ post.title }}</h1>
-            <small>Posted by: {{ post.author }}</small>
+            <a href="{% url 'show_profile_page' post.author.profile.id %}">
+                <small>Posted by: {{ post.author }}</small>
+            </a>
             <p>Likes: {{ post.likes.count }}</p>
             <p>{{ post.publication_date }}</p>
         </div>

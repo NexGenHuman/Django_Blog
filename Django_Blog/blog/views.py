@@ -1,12 +1,29 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from .models import Post, Comment
+from .models import Post, Comment, Profile
 from .forms import PostForm, EditPostForm, CommentForm, UpdateCommentForm
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 # Create your views here.
+class EditProfilePageView(UpdateView):
+    model = Profile
+    template_name = 'edit_profile_page.html'
+    success_url = reverse_lazy('home')
+    fields = ['location', 'facebook', 'tiktok', 'twitter', 'instagram', 'description', 'profile_image']
+
+
+class ShowProfilePageView(DetailView):
+    model = Profile
+    template_name = 'user_profile.html'
+
+    def get_context_data(self, *args, **kwargs):
+        #users = Profile.objects.all()
+        context = super(ShowProfilePageView, self).get_context_data(*args, **kwargs)
+        page_user = get_object_or_404(Profile, id=self.kwargs['pk'])
+        context['page_user'] = page_user
+        return context
 
 def home(request):
     return render(request, 'home.html')
