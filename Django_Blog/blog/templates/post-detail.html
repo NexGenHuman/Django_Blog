@@ -4,15 +4,6 @@
 {% endblock %}
 
 {% block content %}
-    {% if post.requires_permission %}
-    <script>
-        var password = prompt("Please enter the password to view this post", "");
-        if (password != {{  post.password   }}) { // TODO This is not secure
-            alert("Incorrect password");
-            window.location.replace("{% url 'posts' %}");
-        }
-    </script>
-    {% endif %}
     <br/>
     <div class="container-fluid">
       <div class="row align-items-center">

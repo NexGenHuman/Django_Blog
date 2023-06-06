@@ -1,24 +1,89 @@
-{% extends "base.html" %}
+{% extends "base.html" %} {% block content %}
+<br />
+<h2>Posts</h2>
+<hr />
+<div class="container-fluid">
+    {% csrf_token %}
+  <ul class="list-group">
+    {% for post in object_list %}
+    <li class="list-group-item">
+      {% if post.header_image %}
+      <img
+        src="{{ post.header_image.url }}"
+        class="img-fluid rounded float-end"
+        width="25%"
+        height="25%"
+      />
+      {% else %} {% load static %}
+      <img
+        src="{% static 'blog/placeholder.webp' %}"
+        class="img-fluid rounded float-end"
+        alt="header image"
+        width="25%"
+        height="25%"
+      />
+      {% endif %} {% if post.requires_permission %}
+      <a onClick="sendPostRequest({{post.pk}})">{{ post.title }}</a><br />
+      {% else %}
+      <a href="{% url 'post-detail' post.pk %}">{{ post.title }}</a><br />
+      {% endif %}
+      <small>Posted by: {{ post.author }}</small>
+      <p>Likes: {{ post.likes.count }}</p>
+      <p>{{ post.publication_date }}</p>
+    </li>
+    {% endfor %}
+  </ul>
+</div>
 
-{% block content %}
-    <br/>
-    <h2>Posts</h2><hr>
-    <div class="container-fluid">
-        <ul class="list-group">
-            {% for post in object_list %}
-                <li class="list-group-item">
-                    {% if post.header_image %}
-                       <img src="{{ post.header_image.url }}" class="img-fluid rounded float-end" width="25%" height="25%">
-                    {% else %}
-                        {% load static %}
-                        <img src="{% static 'blog/placeholder.webp' %}" class="img-fluid rounded float-end" alt="header image" width="25%" height="25%">
-                    {% endif %}
-                    <a href="{% url 'post-detail' post.pk %}">{{ post.title }}</a><br/>
-                    <small>Posted by: {{ post.author }}</small>
-                    <p>Likes: {{ post.likes.count }}</p>
-                    <p>{{ post.publication_date }}</p>
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
+<script>
+    const getCSRFToken = () => {
+        const csrfTokenElement = document.getElementsByName("csrfmiddlewaretoken")[0];
+        if (csrfTokenElement) {
+          return csrfTokenElement.value;
+        }
+        return null;
+      };
+    
+      const checkCookieExists = (cookieName) => {
+        var regex = new RegExp("(?:^|;\\s*)" + cookieName + "=");
+        return regex.test(document.cookie);
+      }
+
+  const sendPostRequest = (id) => {
+    var password;
+    if (checkCookieExists('post_cookie_' + id))
+      password = ' '
+    else
+      password = prompt("Enter password");
+    if(!password) return;
+    const csrfToken = getCSRFToken();
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", '/posts/' + id, true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.setRequestHeader("X-CSRFToken", csrfToken);
+
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === XMLHttpRequest.DONE) {
+  
+        if (xhr.status === 200) {
+          document.cookie = 'post_cookie_' + id + '=1;path=/';
+          window.location.href = xhr.responseURL;
+        } else {
+          alert("An error occurred while accessing the post.");
+        }
+      }
+    };
+
+    console.log("Sending request");
+    console.log(JSON.stringify({
+        password: password,
+      }));
+    xhr.send(
+      JSON.stringify({
+        password: password,
+      })
+    );
+  };
+</script>
 {% endblock content %}

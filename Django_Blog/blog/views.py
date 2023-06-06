@@ -3,7 +3,9 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from .models import Post, Comment
 from .forms import PostForm, EditPostForm, CommentForm, UpdateCommentForm
 from django.urls import reverse_lazy
+from django.http import JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
+import json
 
 
 # Create your views here.
@@ -16,23 +18,36 @@ class PostsView(ListView):
     template_name = 'posts.html'
 
 
-class PostDetailView(DetailView):
-    model = Post
-    template_name = 'post-detail.html'
-    form_class = CommentForm
+def PostDetailView(request, pk):
+    post = Post.objects.get(pk=pk)
+    form = CommentForm(request.POST or None)
     
-    def post(self, request, *args, **kwargs):
-        form = CommentForm(request.POST)
+    if request.method == 'POST':
         if form.is_valid():
+            print('This is from form')
             form.instance.author = request.user
-            form.instance.post = self.get_object()
+            form.instance.post = post
             form.save()
-            return redirect('post-detail', pk=self.get_object().pk)
+            return redirect('post-detail', pk=post.pk)
     
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['form'] = self.form_class
-        return context
+    context = {
+        'post': post,
+        'form': form
+    }
+    
+    if 'post_cookie_' + str(post.pk) in request.COOKIES:
+        return render(request, 'post-detail.html', context)
+    
+    if(post.requires_permission):
+        json_data = json.loads(request.read().decode('utf-8'))
+        password = json_data['password']
+        print(password)
+        
+        if(post.password != password):
+            print('Password is incorrect')
+            return JsonResponse({'error': 'Password is incorrect'}, status=400)
+    
+    return render(request, 'post-detail.html', context)
 
 
 class AddPostView(LoginRequiredMixin, CreateView):
