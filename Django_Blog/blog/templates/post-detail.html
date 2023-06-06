@@ -5,11 +5,14 @@
 
 {% block content %}
     <br/>
+
     <div class="container-fluid">
       <div class="row align-items-center">
         <div class="col">
             <h1>{{ post.title }}</h1>
-            <small>Posted by: {{ post.author }}</small>
+            <a href="{% url 'show_profile_page' post.author.profile.id %}">
+                <small>Posted by: {{ post.author }}</small>
+            </a>
             <p>Likes: {{ post.likes.count }}</p>
             <p>{{ post.publication_date }}</p>
         </div>
@@ -28,10 +31,47 @@
     <p>{{ post.body|safe }}</p>
     <br/>
     <a class="btn btn-secondary" href="{% url 'posts' %}">Back</a>
-    {% if user.is_authenticated %}
+    {% if user.is_authenticated and post.author.id == user.id %}
         <a class="btn btn-primary" href="{% url 'update_post' post.pk %}">Edit</a>
         <a class="btn btn-danger" href="{% url 'delete_post' post.pk %}">Delete</a>
     {% endif %}
+    <br/>
+    <hr>
+    <br/>
+
+    <div class="card mb-3">
+      <div class="row g-0">
+        <div class="col-md-2">
+          {% if post.author.profile.profile_image %}
+            <img class="card-img" src="{{ post.author.profile.profile_image.url }}" height="200" width="200"/>
+          {% else %}
+              {% load static %}
+              <img src="{% static 'blog/placeholder.webp' %}" class="img-fluid rounded float-end" alt="header image" width="200" height="200">
+          {% endif %}
+        </div>
+        <div class="col-md-10">
+          <div class="card-body">
+              <h5 class="card-title">{{ post.author.first_name }} {{ post.author.last_name }}</h5>
+              <p class="small text-muted">{{ post.author.profile.location }}</p>
+              <p class="small text-muted">
+                  {% if post.author.profile.facebook %}
+                    <a href="{{ post.author.profile.facebook }}">Facebook</a>
+                  {% endif %}
+                  {% if post.author.profile.twitter %}
+                    | <a href="{{ post.author.profile.twitter }}">Twitter</a>
+                  {% endif %}
+                  {% if post.author.profile.instagram %}
+                    | <a href="{{ post.author.profile.instagram }}">Instagram</a>
+                  {% endif %}
+                  {% if post.author.profile.tiktok %}
+                    | <a href="{{ post.author.profile.tiktok }}">Tiktok</a>
+                  {% endif %}
+              </p>
+              <p class="card-text">{{ post.author.profile.description }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <br/>
     <hr>

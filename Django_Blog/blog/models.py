@@ -28,11 +28,16 @@ class Post(models.Model):
     password = models.CharField(max_length=50, null=True, blank=True)
     category = models.ForeignKey('Category', on_delete=models.PROTECT)
 
+    def save(self, *args, **kwargs):
+        if self.author_id is None:
+            self.author = kwargs.pop('author', None)
+        super(Post, self).save(*args, **kwargs)
+
     def __str__(self):
         return self.title + ' | ' + str(self.author)
 
     def get_absolute_url(self):
-        return reverse('post-detail', args=(str(self.id)))
+        return reverse('post-detail', args=[str(self.id)])
 
     class Meta:
         ordering = ['-publication_date']    # default ordering for posts
@@ -52,6 +57,12 @@ class Profile(models.Model):
     instagram = models.URLField(null=True, blank=True)               
     description = models.TextField(max_length=250)
     profile_image = models.ImageField(null=True, blank=True, upload_to='profile_images/')
+
+    def __str__(self):
+        return self.user.username
+
+    def get_absolute_url(self):
+        return reverse('home')
 
 class Category(models.Model):
     name = models.CharField(max_length=50, unique=True)

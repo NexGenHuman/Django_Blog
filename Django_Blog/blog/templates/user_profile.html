@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <br/>
+    <h1>User Profile</h1>
+    <br/>
+    <div class="card mb-3">
+      <div class="row g-0">
+        <div class="col-md-2">
+          {% if page_user.profile_image %}
+            <img class="card-img" src="{{ page_user.profile_image.url }}" height="200" width="200"/>
+          {% else %}
+              {% load static %}
+              <img src="{% static 'blog/placeholder.webp' %}" class="img-fluid rounded float-end" alt="header image" width="200" height="200">
+          {% endif %}
+        </div>
+        <div class="col-md-10">
+          <div class="card-body">
+              <h5 class="card-title">{{ page_user.user.first_name }} {{ page_user.user.last_name }}</h5>
+              <p class="small text-muted">{{ page_user.location }}</p>
+              <p class="small text-muted">
+                  {% if page_user.facebook %}
+                    <a href="{{ page_user.profile.facebook }}">Facebook</a>
+                  {% endif %}
+                  {% if page_user.twitter %}
+                    | <a href="{{ page_user.twitter }}">Twitter</a>
+                  {% endif %}
+                  {% if page_user.instagram %}
+                    | <a href="{{ page_user.instagram }}">Instagram</a>
+                  {% endif %}
+                  {% if page_user.tiktok %}
+                    | <a href="{{ page_user.tiktok }}">Tiktok</a>
+                  {% endif %}
+              </p>
+              <p class="card-text">{{ page_user.description }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% if page_user.user.is_authenticated and page_user.user.id == user.id %}
+        <a class="btn btn-primary" href="{% url 'edit_profile_page' page_user.id %}">Edit Profile</a>
+        <a class="btn btn-primary" href="{% url 'edit_profile' %}">Edit Account</a>
+    {% endif %}
+
+{% endblock %}

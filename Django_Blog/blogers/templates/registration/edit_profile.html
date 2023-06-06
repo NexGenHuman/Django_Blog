@@ -1,19 +1,20 @@
 {% extends 'base.html' %}
 {% block title %}
-    Edit Post
+    Edit Profile
 {% endblock %}
 
 {% block content %}
-    {% if user.is_authenticated and post.author.id == user.id %}
+    {% if user.is_authenticated %}
         <br/>
-        <h1>Update Post</h1>
+        <h1>Edit your profile</h1>
         <hr>
+
         <div class="form-group">
             <form method="post">
                 {% csrf_token %}
                 {{ form.media }}
                 {{ form.as_p }}
-                <button class="btn btn-primary">Update</button>
+                <button class="btn btn-primary">Save</button>
             </form>
         </div>
     {% endif %}
