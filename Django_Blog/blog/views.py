@@ -23,8 +23,11 @@ class EditProfilePageView(UpdateView):
     model = Profile
     template_name = 'edit_profile_page.html'
     success_url = reverse_lazy('home')
-    fields = ['location', 'facebook', 'tiktok', 'twitter', 'instagram', 'description', 'profile_image']
+    form_class = ProfilePageForm
 
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
 
 class ShowProfilePageView(DetailView):
     model = Profile
