@@ -11,7 +11,7 @@
             <img class="card-img" src="{{ page_user.profile_image.url }}" height="200" width="200"/>
           {% else %}
               {% load static %}
-              <img src="{% static 'blog/placeholder.webp' %}" class="img-fluid rounded float-end" alt="header image" width="200" height="200">
+              <img src="{% static 'blog/placeholder.webp' %}" class="card-img" alt="header image" width="200" height="200">
           {% endif %}
         </div>
         <div class="col-md-10">
