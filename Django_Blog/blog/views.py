@@ -40,9 +40,18 @@ class ShowProfilePageView(DetailView):
 def home(request):
     return render(request, 'home.html')
 
-class PostsView(ListView):
-    model = Post
-    template_name = 'posts.html'
+def PostsView(request):
+    posts = Post.objects.all()
+    
+    if request.method == 'POST':
+        search = request.POST['search']
+        posts = Post.objects.filter(title__contains=search)
+    
+    context = {
+        'object_list' : posts
+    }
+    
+    return render(request, 'posts.html', context)
 
 
 def PostDetailView(request, pk):

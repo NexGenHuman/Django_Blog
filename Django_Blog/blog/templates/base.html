@@ -26,6 +26,14 @@
               <li class="nav-item">
               <a class="nav-link" href="{% url 'posts' %}">Posts</a>
             </li>
+            <li>
+              <form class="d-flex" method="POST" action="{% url 'posts' %}">
+                {% csrf_token %}
+
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name='search'>
+                <button class="btn btn-outline-secondary" type="submit">Search</button>
+              </form>
+            </li>
             {% if user.is_authenticated %}
                 <li class="nav-item">
                   <a class="nav-link" href="{% url 'add_post' %}">Add Post</a>
